@@ -2,8 +2,7 @@
 
 Steps:
 
-    1. Get validators, current (active) and delinquent (inactive):
- `./src/getValidators.js`;
+    1. Get validators, current (active) and delinquent (inactive): `./src/getValidators.js`;
 
     2. Create Stake Account to stake SOL: `./src/createStakeAccount.js`;
 
