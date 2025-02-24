@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "description": "Solana Staking",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0"
+  }
 }
