@@ -1,9 +1,14 @@
 /*
- * A Stake Account is a special type of account in Solana. You store your own
- * SOL in a Stake Account, and have the authority to delegate and withdraw
- * funds from your Stake Account.i But, the Stake Account is technically owned
- * by the Stake Program which runs the complex transactions required to
- * facilitate staking.
+ * Delegating stake to a validator is essentially saying, "I trust this
+ * validator to accurately verify transactions on the Solana blockchain. So, I
+ * will delegate my stake to this particular validator." The more stake a
+ * validator has; the more often that validator will be chosen to verify
+ * transactions on the Solana blockchain. If the validator write accurate
+ * transactions without censorship, then the validator gets a reward, and you
+ * get a reward because you staked your SOL with that validator. But if he
+ * writes fraudulent transactions or censors certain types of transactions, both
+ * you and the validator risk losing some of your SOL. Essentially, delegating
+ * your stake rewards people who protect the integrity of the Solana blockchain.
  */
 
 // NPM Packages

@@ -21,7 +21,7 @@ async function main() {
   let connection = new Connection(network, options.preflightCommitment);
 
   /*
-   * Current vote accounts are validators that are currently active whereas
+   * Current vote accounts are validators that are currently active, whereas
    * delinquent vote accounts are validators that are currently inactive.
    */
   let { current, delinquent } = await connection.getVoteAccounts();
