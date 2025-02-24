@@ -1,9 +1,14 @@
 /*
- * A Stake Account is a special type of account in Solana. You store your own
- * SOL in a Stake Account, and have the authority to delegate and withdraw
- * funds from your Stake Account.i But, the Stake Account is technically owned
- * by the Stake Program which runs the complex transactions required to
- * facilitate staking.
+ * Delegating stake to a validator is essentialy saying "I trust this validator
+ * to accurately verify transactions on the Solana blockchain. So, I will
+ * delegate my stake to this particular validator." The more stake a validator
+ * has, the more often that that validator will be chosen to verify transactions
+ * on the Solana blockchain. If the validator write accurate transactions
+ * without censorship, then the validator gets a reward, and you get a reward
+ * because you staked your SOL with that validator. But if he writes fraudulent
+ * transactions or censor certain types of transactions, both you and the
+ * validator risk loosing some of your SOL. Essentialy, delagating your stake
+ * rewards people who protect the integrity of the Solana blockchain.
  */
 
 // NPM Packages
@@ -25,8 +30,8 @@ const SOLANA_PREFLIGHT_COMMITMENT = 'processed'; // 'finalized'
 const SOLANA_STAKE_AMOUNT_IN_SOL = 0.5;
 
 // Solana
-let network = clusterApiUrl(SOLANA_NETWORK);
-let options = {
+const network = clusterApiUrl(SOLANA_NETWORK);
+const options = {
   preflightCommitment: SOLANA_PREFLIGHT_COMMITMENT,
 };
 
@@ -43,7 +48,7 @@ async function main() {
       SOLANA_AIRDROP_AMOUNT_IN_SOL * LAMPORTS_PER_SOL
     );
 
-  //await connection.confirmTransaction(airdropTx);
+  await connection.confirmTransaction(airdropTx);
 
   let walletBalance = await connection.getBalance(wallet.publicKey);
 
@@ -91,6 +96,33 @@ async function main() {
     .getStakeActivationStatus(stakeAccount);
 
   console.log('stakeAccountStatus: ', stakeAccountStatus);
+
+  // Get validator.
+  let validators = await connection.getVoteAccounts();
+  let selectedValidator = validators.current[0];
+  let selectedValidatorPubkey = new PublicKey(selectedValidator.votePubkey);
+
+  console.log('selectedValidatorPubkey: ', selectedValidatorPubkey);
+
+  // Delegate stake to validator.
+  let delegateStakeTx = StakeProgram.delegate({
+    stakePubkey: stakeAccount.publicKey,
+    authorizedPubkey: wallet.publicKey,
+    votePubkey: selectedValidatorPubkey,
+  });
+
+  let delegateStakeTxId = await sendAndConfirmTransaction(
+    connection,
+    delegateStakeTx,
+    [ wallet ]
+  );
+
+  console.log('delegateStakeTxId: ', delegateStakeTxId);
+
+  stakeAccountStatus = await connection
+    .getStakeActivationStatus(stakeAccount);
+
+  console.log('stakeAccountStatus: ', stakeAccountStatus);
 }
 
 async function runMain() {
@@ -98,8 +130,9 @@ async function runMain() {
     await main();
   }
   catch(error) {
-    console.log("Something went wrong creating Stake Account: ", error);
+    console.log("Something went wrong delegating stake: ", error);
   }
 }
 
 runMain();
+

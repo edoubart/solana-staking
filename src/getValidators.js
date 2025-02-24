@@ -12,8 +12,8 @@ const SOLANA_NETWORK = 'devnet';
 const SOLANA_PREFLIGHT_COMMITMENT = 'processed'; // 'finalized'
 
 // Solana
-const network = clusterApiUrl(SOLANA_NETWORK);
-const options = {
+let network = clusterApiUrl(SOLANA_NETWORK);
+let options = {
   preflightCommitment: SOLANA_PREFLIGHT_COMMITMENT,
 };
 
@@ -36,7 +36,7 @@ async function runMain() {
     await main();
   }
   catch(error) {
-    console.log("Something went wrong fetching validators: ", error);
+    console.log("Something went wrong getting validators: ", error);
   }
 }
 
